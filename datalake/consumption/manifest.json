@@ -1,0 +1,67 @@
+[
+    {
+        "file_name": "anomaly_flags.parquet",
+        "row_count": 0,
+        "schema": {
+            "patient_id": "str",
+            "date_of_birth": "str",
+            "sex": "str",
+            "blood_group": "str",
+            "site": "object"
+        },
+        "processing_timestamp": "2026-04-27T06:21:50.139475Z",
+        "sha256_checksum": "93cfae98157b93d842289fe5977c347b10a1023f6f47e2d185ba3093429e7fce"
+    },
+    {
+        "file_name": "diagnosis_frequency.parquet",
+        "row_count": 62,
+        "schema": {
+            "icd10_code": "str",
+            "count": "int64"
+        },
+        "processing_timestamp": "2026-04-27T06:21:50.150112Z",
+        "sha256_checksum": "e083b75210f95c0771bb336b2612524f5ac59c30a435882c28819400ae891062"
+    },
+    {
+        "file_name": "high_risk_patients.parquet",
+        "row_count": 15,
+        "schema": {
+            "patient_ref": "str"
+        },
+        "processing_timestamp": "2026-04-27T06:21:50.160164Z",
+        "sha256_checksum": "9426aafe05a12058af2e05f7f8bd1d0745f646a32836ea3de8ff907ba542b2b6"
+    },
+    {
+        "file_name": "lab_statistics.parquet",
+        "row_count": 16,
+        "schema": {
+            "test_name": "str",
+            "mean": "float64",
+            "median": "float64",
+            "std": "float64"
+        },
+        "processing_timestamp": "2026-04-27T06:21:50.172025Z",
+        "sha256_checksum": "6c7e31702db7b2e4e00ca1c920d9a0dae963c0ffdf86b4e2cfbca6a569741a39"
+    },
+    {
+        "file_name": "patient_summary.parquet",
+        "row_count": 1,
+        "schema": {
+            "total_patients": "int64",
+            "male_count": "int64",
+            "female_count": "int64"
+        },
+        "processing_timestamp": "2026-04-27T06:21:50.191176Z",
+        "sha256_checksum": "39016f5bfcd99a2ff36a566a93101e819b0c909ce5d94a07f700b99effaf9184"
+    },
+    {
+        "file_name": "variant_hotspots.parquet",
+        "row_count": 5,
+        "schema": {
+            "gene": "str",
+            "count": "int64"
+        },
+        "processing_timestamp": "2026-04-27T06:21:50.206133Z",
+        "sha256_checksum": "7933577f0ed26ac4860a4d4804808bb0100db89dfe58799b41ce5db6ef5328aa"
+    }
+]

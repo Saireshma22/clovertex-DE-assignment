@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  clovertex_pipeline:
+    build: .
+    container_name: clovertex_pipeline
+    volumes:
+      - .:/app
+    command: python -m pipeline.main

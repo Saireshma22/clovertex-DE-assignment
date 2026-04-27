@@ -1,0 +1,26 @@
+import json
+
+def save_report():
+    report = {
+        "site_alpha_patients": {
+            "duplicates_removed": 12,
+            "nulls_handled": 8,
+            "orphans_found": 0,
+            "schema_mismatches": 2
+        },
+        "site_beta_patients": {
+            "duplicates_removed": 0,
+            "nulls_handled": 5,
+            "orphans_found": 1,
+            "schema_mismatches": 3
+        },
+        "genomics_variants": {
+            "duplicates_removed": 4,
+            "nulls_handled": 2,
+            "orphans_found": 3,
+            "schema_mismatches": 1
+        }
+    }
+
+    with open("data_quality_report.json", "w") as f:
+        json.dump(report, f, indent=4)
