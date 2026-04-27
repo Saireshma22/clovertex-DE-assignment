@@ -1,0 +1,82 @@
+
+        "nulls_handled": 15,
+
+        "encoding_fixed": 7
+
+    },
+
+    "processing_timestamp": "2026-04-27T06:38:50.391735Z"
+
+}
+
+{
+
+    "dataset": "site_beta_patients",
+
+    "rows_in": 310,
+
+    "rows_out": 310,
+
+    "issues_found": {
+
+        "duplicates_removed": 0,
+
+        "nulls_handled": 10,
+
+        "encoding_fixed": 5
+
+    },
+
+    "processing_timestamp": "2026-04-27T06:38:50.391826Z"
+
+}
+
+Cleaned files saved successfully
+
+Unified Patients Shape: (650, 5)
+
+Unified patients table saved successfully
+
+Filtered Genomics Shape: (231, 13)
+
+Filtered genomics saved successfully
+
+Data quality report created successfully
+
+Pipeline Completed
+
+Raw files copied successfully
+
+Manifest created for datalake/raw
+
+Manifest created for datalake/refined
+
+Manifest created for datalake/consumption
+
+Task 2 completed successfully
+
+patient_summary.parquet created
+
+lab_statistics.parquet created
+
+diagnosis_frequency.parquet created
+
+variant_hotspots.parquet created
+
+high_risk_patients.parquet created
+
+anomaly_flags.parquet created
+
+Task 3 completed successfully
+
+age_distribution.png created
+
+gender_distribution.png created
+
+diagnosis_frequency.png created
+
+lab_distribution.png created
+
+genomics_scatter.png created
+
+Task 4 completed successfully
