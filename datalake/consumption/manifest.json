@@ -1,16 +1,32 @@
 [
     {
         "file_name": "anomaly_flags.parquet",
-        "row_count": 0,
+        "row_count": 52,
         "schema": {
-            "patient_id": "str",
-            "date_of_birth": "str",
-            "sex": "str",
-            "blood_group": "str",
-            "site": "object"
+            "lab_result_id": "str",
+            "patient_ref": "str",
+            "test_name": "str",
+            "test_value": "float64",
+            "test_unit": "str",
+            "collection_date": "str",
+            "ordering_physician": "str",
+            "site_name": "str",
+            "anomaly_type": "str",
+            "variant_id": "str",
+            "gene": "str",
+            "chromosome": "str",
+            "position": "float64",
+            "ref_allele": "str",
+            "alt_allele": "str",
+            "variant_type": "str",
+            "allele_frequency": "float64",
+            "read_depth": "float64",
+            "clinical_significance": "str",
+            "sample_date": "str",
+            "sequencing_platform": "str"
         },
-        "processing_timestamp": "2026-04-27T06:21:50.139475Z",
-        "sha256_checksum": "93cfae98157b93d842289fe5977c347b10a1023f6f47e2d185ba3093429e7fce"
+        "processing_timestamp": "2026-05-08T11:48:40.790958Z",
+        "sha256_checksum": "3ac8f177605fb3846597110fd5430fed0b6bb9aaae5185398775e99164542ff7"
     },
     {
         "file_name": "diagnosis_frequency.parquet",
@@ -19,17 +35,17 @@
             "icd10_code": "str",
             "count": "int64"
         },
-        "processing_timestamp": "2026-04-27T06:21:50.150112Z",
+        "processing_timestamp": "2026-05-08T11:48:40.794956Z",
         "sha256_checksum": "e083b75210f95c0771bb336b2612524f5ac59c30a435882c28819400ae891062"
     },
     {
         "file_name": "high_risk_patients.parquet",
-        "row_count": 15,
+        "row_count": 2,
         "schema": {
             "patient_ref": "str"
         },
-        "processing_timestamp": "2026-04-27T06:21:50.160164Z",
-        "sha256_checksum": "9426aafe05a12058af2e05f7f8bd1d0745f646a32836ea3de8ff907ba542b2b6"
+        "processing_timestamp": "2026-05-08T11:48:40.797954Z",
+        "sha256_checksum": "051aa977a5c48041cc8f6fe6f044b8831778586b801acd53c8e415d0af161939"
     },
     {
         "file_name": "lab_statistics.parquet",
@@ -38,10 +54,11 @@
             "test_name": "str",
             "mean": "float64",
             "median": "float64",
-            "std": "float64"
+            "std": "float64",
+            "abnormal_flag": "bool"
         },
-        "processing_timestamp": "2026-04-27T06:21:50.172025Z",
-        "sha256_checksum": "6c7e31702db7b2e4e00ca1c920d9a0dae963c0ffdf86b4e2cfbca6a569741a39"
+        "processing_timestamp": "2026-05-08T11:48:40.801735Z",
+        "sha256_checksum": "97637a1d9c76cc05e34c18742032d0d74796149092521a7a6df754ee416deebf"
     },
     {
         "file_name": "patient_summary.parquet",
@@ -49,19 +66,23 @@
         "schema": {
             "total_patients": "int64",
             "male_count": "int64",
-            "female_count": "int64"
+            "female_count": "int64",
+            "site_count": "int64"
         },
-        "processing_timestamp": "2026-04-27T06:21:50.191176Z",
-        "sha256_checksum": "39016f5bfcd99a2ff36a566a93101e819b0c909ce5d94a07f700b99effaf9184"
+        "processing_timestamp": "2026-05-08T11:48:40.805694Z",
+        "sha256_checksum": "738faad0380f7ad52646c7e1dda4488f5fc34ea9ac13f73ffba50841ea786792"
     },
     {
         "file_name": "variant_hotspots.parquet",
         "row_count": 5,
         "schema": {
             "gene": "str",
-            "count": "int64"
+            "variant_count": "int64",
+            "mean_af": "float64",
+            "percentile_25": "float64",
+            "percentile_75": "float64"
         },
-        "processing_timestamp": "2026-04-27T06:21:50.206133Z",
-        "sha256_checksum": "7933577f0ed26ac4860a4d4804808bb0100db89dfe58799b41ce5db6ef5328aa"
+        "processing_timestamp": "2026-05-08T11:48:40.809330Z",
+        "sha256_checksum": "831a5182477f0aaf257de825b1ffff456dd6260c273021eab846a38dd002b584"
     }
 ]

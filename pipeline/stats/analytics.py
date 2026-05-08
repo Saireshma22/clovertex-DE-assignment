@@ -1,11 +1,17 @@
 import pandas as pd
 
-
 def generate_patient_summary(patients):
     summary = {
         "total_patients": [len(patients)],
-        "male_count": [len(patients[patients["sex"] == "Male"])],
-        "female_count": [len(patients[patients["sex"] == "Female"])]
+        "male_count": [
+            len(patients[patients["sex"] == "Male"])
+        ],
+        "female_count": [
+            len(patients[patients["sex"] == "Female"])
+        ],
+        "site_count": [
+            patients["site"].nunique()
+        ]
     }
 
     df = pd.DataFrame(summary)
@@ -20,8 +26,13 @@ def generate_patient_summary(patients):
 
 def generate_lab_statistics(labs):
     stats = labs.groupby("test_name")["test_value"].agg(
-        ["mean", "median", "std"]
+        mean="mean",
+        median="median",
+        std="std"
     ).reset_index()
+
+    # Simple abnormal flag
+    stats["abnormal_flag"] = stats["mean"] > 100
 
     stats.to_parquet(
         "datalake/consumption/lab_statistics.parquet",
@@ -45,9 +56,25 @@ def generate_diagnosis_frequency(diagnosis):
 
 
 def generate_variant_hotspots(genomics):
-    hotspots = genomics["gene"].value_counts().head(5).reset_index()
+    filtered = genomics[
+        genomics["clinical_significance"].isin(
+            ["Pathogenic", "Likely Pathogenic"]
+        )
+    ]
 
-    hotspots.columns = ["gene", "count"]
+    hotspots = filtered.groupby("gene").agg(
+        variant_count=("gene", "count"),
+        mean_af=("allele_frequency", "mean"),
+        percentile_25=("allele_frequency",
+                        lambda x: x.quantile(0.25)),
+        percentile_75=("allele_frequency",
+                        lambda x: x.quantile(0.75))
+    ).reset_index()
+
+    hotspots = hotspots.sort_values(
+        by="variant_count",
+        ascending=False
+    ).head(5)
 
     hotspots.to_parquet(
         "datalake/consumption/variant_hotspots.parquet",
@@ -57,30 +84,72 @@ def generate_variant_hotspots(genomics):
     print("variant_hotspots.parquet created")
 
 
-def generate_anomaly_flags(patients):
-    anomalies = patients[
-        patients["date_of_birth"].isnull()
+def generate_anomaly_flags(labs, genomics):
+    # Lab anomalies
+    lab_anomalies = labs[
+        (labs["test_value"] < 0) |
+        (labs["test_value"] > 1000)
     ]
+
+    # Genomics anomalies
+    genomics_anomalies = genomics[
+        (genomics["allele_frequency"] > 1) |
+        (genomics["allele_frequency"] < 0) |
+        (genomics["read_depth"] < 0)
+    ]
+
+    # Standardize columns
+    lab_anomalies = lab_anomalies.copy()
+    lab_anomalies["anomaly_type"] = "lab_value_issue"
+
+    genomics_anomalies = genomics_anomalies.copy()
+    genomics_anomalies["anomaly_type"] = "genomics_issue"
+
+    # Combine anomalies
+    anomalies = pd.concat(
+        [lab_anomalies, genomics_anomalies],
+        ignore_index=True,
+        sort=False
+    )
 
     anomalies.to_parquet(
         "datalake/consumption/anomaly_flags.parquet",
         index=False
     )
 
+    print(f"Anomalies detected: {len(anomalies)}")
+
     print("anomaly_flags.parquet created")
 
 
 def generate_high_risk_patients(labs, genomics):
-    hba1c = labs[
+    # HbA1c high-risk patients
+    diabetic = labs[
         (labs["test_name"].str.lower() == "hba1c") &
         (labs["test_value"] > 7)
     ]
 
-    risky_patients = hba1c[
-        ["patient_ref"]
-    ].drop_duplicates()
+    diabetic_ids = set(diabetic["patient_ref"])
 
-    risky_patients.to_parquet(
+    # Pathogenic genomics patients
+    pathogenic = genomics[
+        genomics["clinical_significance"].isin(
+            ["Pathogenic", "Likely Pathogenic"]
+        )
+    ]
+
+    pathogenic_ids = set(pathogenic["patient_ref"])
+
+    # Cross-domain intersection
+    high_risk_ids = diabetic_ids.intersection(
+        pathogenic_ids
+    )
+
+    high_risk = pd.DataFrame({
+        "patient_ref": list(high_risk_ids)
+    })
+
+    high_risk.to_parquet(
         "datalake/consumption/high_risk_patients.parquet",
         index=False
     )

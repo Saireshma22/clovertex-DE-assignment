@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 from pipeline.ingestion.load_data import load_csv, load_json, load_parquet
 from pipeline.cleaning.clean_patients import clean_patients
 from pipeline.transformation.unify_patients import unify_patients
@@ -6,6 +7,9 @@ from pipeline.cleaning.filter_genomics import filter_genomics
 from pipeline.utils.report import save_report
 from pipeline.utils.logger import log_dataset
 from pipeline.utils.copy_raw import copy_raw_files
+from pipeline.transformation.partition_labs import (
+    partition_lab_results
+)
 from pipeline.utils.manifest import create_manifest
 from pipeline.stats.analytics import (
     generate_patient_summary,
@@ -20,9 +24,10 @@ from pipeline.stats.plots import (
     create_gender_distribution,
     create_diagnosis_chart,
     create_lab_distribution,
-    create_variant_scatter
+    create_variant_scatter,
+    create_high_risk_summary,
+    create_data_quality_chart
 )
-
 
 def main():
     print("Pipeline Started...")
@@ -132,7 +137,7 @@ def main():
     # -------------------------------
 # TASK 2 — Data Lake Structure
 # -------------------------------
-
+    partition_lab_results(gamma)
     copy_raw_files()
 
     create_manifest("datalake/raw")
@@ -158,7 +163,10 @@ def main():
         genomics_clean
     )
 
-    generate_anomaly_flags(patients)
+    generate_anomaly_flags(
+    gamma,
+    genomics_clean
+    )
 
     print("Task 3 completed successfully")
 
@@ -175,6 +183,14 @@ def main():
     create_lab_distribution(gamma)
 
     create_variant_scatter(genomics_clean)
+
+    high_risk_df = pd.read_parquet(
+        "datalake/consumption/high_risk_patients.parquet"
+    )
+
+    create_high_risk_summary(high_risk_df)
+
+    create_data_quality_chart()
 
     print("Task 4 completed successfully")
 
